@@ -2,24 +2,22 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
-
 # This workflow will initiate a Veracode Static Analysis Pipeline scan, return a results.json and convert to SARIF for upload as a code scanning alert
-
-name: Veracode Static Analysis Pipeline Scan
-
+name: AWS_Account_Onboarding_Lambda_Clone
 on:
   push:
-    branches: [ "main" ]
+    branches: [ “main” ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches: [ “main” ]
   schedule:
-    - cron: '38 23 * * 0'
-
+    - cron: ‘1 * * * *’
+  workflow_dispatch:
+env:
+  SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 permissions:
   contents: read
-
 jobs:
   # This workflow contains a job to build and submit pipeline scan, you will need to customize the build process accordingly and make sure the artifact you build is used as the file input to the pipeline scan file parameter
   build-and-pipeline-scan:
@@ -30,23 +28,21 @@ jobs:
       actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     runs-on: ubuntu-latest
     steps:
-
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it and copies all sources into ZIP file for submitting for analysis. Replace this section with your applications build steps
     - uses: actions/checkout@v3
       with:
-        repository: ''
-
+        repository: ‘’
+    - run: ./gradlew buildZip
+    - run: ls build/distributions
     - run: zip -r veracode-scan-target.zip ./
-
     # download the Veracode Static Analysis Pipeline scan jar
     - run: curl --silent --show-error --fail -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
     - run: unzip -o pipeline-scan-LATEST.zip
-
     - uses: actions/setup-java@v3
       with:
         java-version: 8
-        distribution: 'temurin'
-    - run: java -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" --fail_on_severity="Very High, High" --file veracode-scan-target.zip
+        distribution: ‘temurin’
+    - run: java -jar pipeline-scan.jar --veracode_api_id “${{secrets.VERACODE_API_ID}}” --veracode_api_key “${{secrets.VERACODE_API_KEY}}” --fail_on_severity=“Very High, High, Medium” --file veracode-scan-target.zip
       continue-on-error: true
     - name: Convert pipeline scan output to SARIF format
       id: convert
@@ -57,3 +53,87 @@ jobs:
       with:
         # Path to SARIF file relative to the root of the repository
         sarif_file: veracode-results.sarif
+    - name: Veracode Dependency Scanning
+    # You may pin to the exact commit or the version.
+    # uses: veracode/veracode-sca@3e357c713c2cca6f56b30ef0cce6870070f3b94c
+      uses: veracode/veracode-sca@v2.1.11
+      with:
+        # Authorization token to query and create issues
+        github_token: ${{ github.token }}
+        # Run the SRCCLR with the `--quick` options
+        quick: false
+        # Show update advisor
+        update_advisor: true
+        # A git URL to work with in case the scan is not for the current repository
+        # url: # optional, default is
+        # An attribute to instruct the action to create an issue from found vulnerability or just simple text output
+        # create-issues: # optional, default is false
+        # A path within the repository where the build definition starts
+        path: ./
+        # Run the SRCCLR in debug mode
+        debug: true
+        # Run the SRCCLR with the `--skip-collectors` options
+        # skip-collectors: # optional, default is false
+        # Run the SRCCLR with the `--allow-dirty` option
+        allow-dirty: true
+        # Run the SRCCLR with the `--recursive` option
+        recursive: true
+        # Run the SRCCLR with the `--skip-vms` option
+        # skip-vms: # optional, default is false
+        # Run the SRCCLR with the `--no-graphs` option
+        # no-graphs: # optional, default is false
+    - name: Veracode Upload And Scan
+    # You may pin to the exact commit or the version.
+    # uses: veracode/veracode-uploadandscan-action@98e2a2941b985e55bfe469ebcb970b2e686625e4
+      uses: veracode/veracode-uploadandscan-action@0.2.6
+      with:
+        # appname
+        appname: AWS_Account_Onboarding_Lambda_Clone
+        # createprofile
+        createprofile: false
+        # filepath
+        filepath: veracode-scan-target.zip
+        # version
+        version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+        # vid
+        vid: ${{secrets.VERACODE_API_ID}}
+        # vkey
+        vkey: ${{secrets.VERACODE_API_KEY}}
+        # true or false
+        # createsandbox: # optional
+        # # name of the sandbox
+        # sandboxname: # optional
+        # # wait X minutes for the scan to complete
+        # scantimeout: # optional
+        # # modules to exclude from module selection
+        # exclude: # optional
+        # # modules to include in module selection
+        # include: # optional
+        # # business criticality - policy selection
+        # criticality: # optional
+        # # filename pattern
+        # pattern: # optional
+        # # replacement
+        # replacement: # optional
+        # # specify to scan in a sandbox
+        # sandboxid: # optional
+        # # All top level modules
+        # scanallnonfataltoplevelmodules: # optional
+        # # platform selected modules
+        # selected: # optional
+        # # selected modules like from previous scan
+        # selectedpreviously: # optional
+        # # teams
+        # teams: # optional
+        # # teams
+        # toplevel: # optional
+        # # automatically delete the current scan if there are any errors when uploading files or starting the scan
+        deleteincompletescan: 1
+        # # Interval, in seconds, to poll for the status of a running scan. Value range is 30 to 120 (two minutes). Default is 120.
+        # scanpollinginterval: # optional
+        # # specify version of the Java API Wrapper; default is latest
+        # javawrapperversion: # optional
+        # # show detailed diagnostic information, which you can use for debugging, in the output.
+        # debug: # optional
+        # # automatically select all new top-level modules for inclusion in the scan
+        # includenewmodules: # optional
