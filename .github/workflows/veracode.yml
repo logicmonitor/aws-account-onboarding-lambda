@@ -11,7 +11,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ “main” ]
   schedule:
-    - cron: ‘* * * * *’
+    - cron: '* * * * *'
   workflow_dispatch:
 env:
   SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
