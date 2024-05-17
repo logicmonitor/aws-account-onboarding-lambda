@@ -19,9 +19,9 @@ multiple roles and policies need to be created in succession.
 
 # Setting up locally
 
-`$ git clone https://github.com/logicmonitor/cloud-samples.git`
+`$ git clone https://github.com/logicmonitor/aws-account-onboarding-lambda.git`
 
-`$ cd cloud-samples`
+`$ cd aws-account-onboarding-lambda`
 
 # Changing standard policy json
 
@@ -31,7 +31,7 @@ edit that, please do so before proceeding further.
 # s3 bucket creation
 
 This step is needed to deploy artifacts related to the lambda function. We need to create an s3 bucket to
-store the artifacts. Run the following command from the root level `cloud-samples`:
+store the artifacts. Run the following command from the root level `aws-account-onboarding-lambda`:
 
 `$ ./create_aws_s3_bucket.sh <enter-a-bucket-name-to-create> <aws-profile-name> <aws-region>`
 
@@ -47,11 +47,11 @@ add `--profile <your-aws-profile-name>` in the command.
 # Generate the artifacts
 
 Let's package our java code as a zip. Run the following command from the root level of
-project `cloud-samples`:
+project `aws-account-onboarding-lambda`:
 
 `./gradlew buildZip`
 
-Gradle will generate the zip under the project in the path `build/distributions/cloud-samples.zip`.
+Gradle will generate the zip under the project in the path `build/distributions/aws-account-onboarding-lambda.zip`.
 
 # Deploy artifacts and lambda function - One time process
 
