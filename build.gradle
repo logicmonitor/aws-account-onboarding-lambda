@@ -9,11 +9,23 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
-    implementation platform('software.amazon.awssdk:bom:2.20.140')
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
+    implementation platform('software.amazon.awssdk:bom:2.25.60')
     implementation 'software.amazon.awssdk:iam'
     implementation 'org.slf4j:slf4j-api:2.0.6'
     implementation 'com.google.code.gson:gson:2.10'
+
+    constraints {
+        implementation ('io.netty:netty-codec-http:4.1.110.Final') {
+            because 'lower version pulled had vulnerability affecting this application'
+        }
+        implementation ('io.netty:netty-codec-http2:4.1.110.Final') {
+            because 'lower version pulled had vulnerability affecting this application'
+        }
+        implementation ('io.netty:netty-handler:4.1.110.Final') {
+            because 'lower version pulled had vulnerability affecting this application'
+        }
+    }
 }
 
 java {
