@@ -144,7 +144,7 @@ jobs:
         # # teams
         # toplevel: # optional
         # # automatically delete the current scan if there are any errors when uploading files or starting the scan
-        deleteincompletescan: 1
+        deleteincompletescan: 2
         # # Interval, in seconds, to poll for the status of a running scan. Value range is 30 to 120 (two minutes). Default is 120.
         # scanpollinginterval: # optional
         # # specify version of the Java API Wrapper; default is latest
