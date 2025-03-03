@@ -16,13 +16,13 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10'
 
     constraints {
-        implementation ('io.netty:netty-codec-http:4.1.110.Final') {
+        implementation ('io.netty:netty-codec-http:4.1.119.Final') {
             because 'lower version pulled had vulnerability affecting this application'
         }
-        implementation ('io.netty:netty-codec-http2:4.1.110.Final') {
+        implementation ('io.netty:netty-codec-http2:4.1.119.Final') {
             because 'lower version pulled had vulnerability affecting this application'
         }
-        implementation ('io.netty:netty-handler:4.1.110.Final') {
+        implementation ('io.netty:netty-handler:4.1.119.Final') {
             because 'lower version pulled had vulnerability affecting this application'
         }
     }
