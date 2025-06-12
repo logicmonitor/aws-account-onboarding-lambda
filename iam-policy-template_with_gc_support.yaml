@@ -22,6 +22,8 @@ Resources:
         Statement:
           - Effect: Allow
             Action:
+              - 'acm:Describe*'
+              - 'acm:List*'
               - 'apigateway:GET'
               - 'appstream:DescribeFleets'
               - 'appstream:ListTagsForResource'
@@ -106,6 +108,7 @@ Resources:
               - 'mediastore:List*'
               - 'mediatailor:ListPlaybackConfigurations'
               - 'mediatailor:ListTagsForResource'
+              - 'mgn:Describe*'
               - 'mq:List*'
               - 'networkmanager:DescribeGlobalNetworks'
               - 'networkmanager:Get*'
