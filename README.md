@@ -106,4 +106,3 @@ policy to role.
 If there are any issues or security vulnerabilities you want to report, please add them to
 the Issues section. The
 maintainers of this project will review.
-  
