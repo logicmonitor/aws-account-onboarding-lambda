@@ -2,8 +2,8 @@
 name: Veracode Scans (6 AM Eastern approx)
 
 on:
-  schedule:
-    - cron: "0 10 * * *"   # Runs daily at 10:00 UTC (6 AM EDT, 5 AM EST)
+#  schedule:
+#    - cron: "0 10 * * *"   # Runs daily at 10:00 UTC (6 AM EDT, 5 AM EST)
   workflow_dispatch: {}
 
 permissions:
