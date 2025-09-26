@@ -11,8 +11,7 @@ permissions:
 
 jobs:
   veracode:
-#     uses: logicmonitor/veracode/.github/workflows/veracode-trigger.yml@main       
-    uses: logicmonitor/veracode/.github/workflows/veracode-trigger.yml@8a5af2776bb8dd4db3b00acef35e5f1329015edb
+     uses: logicmonitor/veracode/.github/workflows/veracode-trigger.yml@main       
     with:
       trigger_title: "Veracode Scheduling Trigger"
       comment_command: "veracode-scans"  # must match exactly
