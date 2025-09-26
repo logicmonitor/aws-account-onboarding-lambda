@@ -1,5 +1,4 @@
-# .github/workflows/veracode-daily.yml
-name: Veracode Scans (6 AM Eastern approx)
+name: Veracode Daily Scans
 
 on:
 #  schedule:
