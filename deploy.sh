@@ -1,4 +1,19 @@
 #!/bin/bash
+
+#############################################################################
+#
+# Deploy artifacts and lambda function to AWS using CloudFormation
+#
+# Prerequisites:
+# 1. AWS CLI installed and configured with necessary permissions
+# 2. An S3 bucket created to store the packaged artifacts (bucket name stored in bucket-name.txt)
+#
+# Usage: ./deploy.sh <aws-profile-name> <aws-region> <enter-a-lambda-function-name>
+#
+# Example: ./deploy.sh default us-east-1 my-cloudformation-stack
+#
+#############################################################################
+
 set -eo pipefail
 ARTIFACT_BUCKET=$(cat bucket-name.txt)
 TEMPLATE=template.yml
